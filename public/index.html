@@ -1,309 +1,991 @@
 <!DOCTYPE html>
+
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commando AI</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        color: white;
+        overflow: hidden;
+
+        background:
+            radial-gradient(circle at 20% 20%, rgba(100, 50, 255, 0.20), transparent 35%),
+            radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.15), transparent 35%),
+            linear-gradient(135deg, #050509, #0b0714, #030409);
+
+        position: relative;
+    }
+
+    body::before,
+    body::after {
+        content: "";
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.25;
+        animation: hareket 8s infinite alternate ease-in-out;
+        pointer-events: none;
+    }
+
+    body::before {
+        background: #713cff;
+        top: -100px;
+        left: -100px;
+    }
+
+    body::after {
+        background: #008cff;
+        right: -100px;
+        bottom: -100px;
+        animation-delay: 2s;
+    }
+
+    @keyframes hareket {
+        from {
+            transform: translate(0, 0);
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            color: white;
-            overflow: hidden;
-
-            background:
-                radial-gradient(circle at 20% 20%, rgba(100, 50, 255, 0.20), transparent 35%),
-                radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.15), transparent 35%),
-                linear-gradient(135deg, #050509, #0b0714, #030409);
-
-            position: relative;
+        to {
+            transform: translate(80px, 50px);
         }
+    }
 
-        /* Arka plan ışıkları */
-        body::before,
-        body::after {
-            content: "";
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.25;
-            animation: hareket 8s infinite alternate ease-in-out;
-            pointer-events: none;
-        }
+    .container {
+        position: relative;
+        z-index: 1;
 
-        body::before {
-            background: #713cff;
-            top: -100px;
-            left: -100px;
-        }
+        width: 95%;
+        max-width: 1200px;
+        height: 90vh;
 
-        body::after {
-            background: #008cff;
-            right: -100px;
-            bottom: -100px;
-            animation-delay: 2s;
-        }
+        margin: 5vh auto;
 
-        @keyframes hareket {
-            from {
-                transform: translate(0, 0);
-            }
+        background: rgba(10, 10, 18, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 25px;
 
-            to {
-                transform: translate(80px, 50px);
-            }
-        }
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        box-shadow:
+            0 0 50px rgba(80, 40, 255, 0.15),
+            inset 0 0 30px rgba(255, 255, 255, 0.02);
+
+        display: flex;
+        overflow: hidden;
+    }
+
+    /* ==========================================
+       SOL MENÜ
+       ========================================== */
+
+    .sidebar {
+        width: 270px;
+        min-width: 270px;
+
+        display: flex;
+        flex-direction: column;
+
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 0.20);
+    }
+
+    .sidebar-header {
+        padding: 20px;
+        font-size: 20px;
+        font-weight: bold;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .new-chat {
+        margin: 15px;
+        padding: 13px;
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+
+        background: linear-gradient(135deg, #603cff, #914dff);
+        color: white;
+
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .new-chat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(100, 60, 255, 0.35);
+    }
+
+    #conversationList {
+        flex: 1;
+        overflow-y: auto;
+        padding: 5px 10px 15px;
+    }
+
+    .conversation {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        margin-bottom: 7px;
+        padding: 11px;
+
+        border-radius: 11px;
+        cursor: pointer;
+
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid transparent;
+
+        transition: 0.2s;
+    }
+
+    .conversation:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .conversation.active {
+        background: rgba(100, 60, 255, 0.18);
+        border-color: rgba(130, 90, 255, 0.35);
+    }
+
+    .conversation-title {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        font-size: 14px;
+    }
+
+    .conversation-buttons {
+        display: flex;
+        gap: 3px;
+    }
+
+    .small-button {
+        width: 27px;
+        height: 27px;
+
+        padding: 0;
+        border: none;
+        border-radius: 7px;
+
+        background: transparent;
+        color: #aaa;
+
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .small-button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* ==========================================
+       ANA CHAT
+       ========================================== */
+
+    .main {
+        flex: 1;
+        min-width: 0;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    header {
+        padding: 22px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .status {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #7cffb2;
+        font-weight: normal;
+    }
+
+    #chat {
+        flex: 1;
+        padding: 25px;
+        overflow-y: auto;
+    }
+
+    .message {
+        max-width: 75%;
+        padding: 13px 17px;
+        margin-bottom: 15px;
+
+        border-radius: 18px;
+        line-height: 1.5;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .ai {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        margin-right: auto;
+    }
+
+    .user {
+        background: linear-gradient(135deg, #603cff, #874cff);
+        margin-left: auto;
+
+        box-shadow: 0 5px 20px rgba(90, 50, 255, 0.25);
+    }
+
+    .blocked {
+        background: rgba(255, 70, 70, 0.10);
+        border: 1px solid rgba(255, 70, 70, 0.25);
+    }
+
+    .input-area {
+        display: flex;
+        gap: 10px;
+        padding: 18px;
+
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    #message {
+        flex: 1;
+        padding: 15px 18px;
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 15px;
+
+        outline: none;
+        background: rgba(255, 255, 255, 0.06);
+        color: white;
+
+        font-size: 15px;
+    }
+
+    #message::placeholder {
+        color: #999;
+    }
+
+    #message:focus {
+        border-color: rgba(130, 90, 255, 0.8);
+        box-shadow: 0 0 15px rgba(100, 60, 255, 0.15);
+    }
+
+    .send-button {
+        padding: 0 22px;
+        border: none;
+        border-radius: 15px;
+
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+
+        background: linear-gradient(135deg, #603cff, #914dff);
+        transition: 0.2s;
+    }
+
+    .send-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(100, 60, 255, 0.4);
+    }
+
+    .send-button:active {
+        transform: scale(0.96);
+    }
+
+    .send-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Kaydırma çubukları */
+
+    #chat::-webkit-scrollbar,
+    #conversationList::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #chat::-webkit-scrollbar-thumb,
+    #conversationList::-webkit-scrollbar-thumb {
+        background: #603cff;
+        border-radius: 10px;
+    }
+
+    /* Mobil */
+
+    @media (max-width: 700px) {
 
         .container {
-            position: relative;
-            z-index: 1;
-
-            width: 95%;
-            max-width: 900px;
-            height: 90vh;
-
-            margin: 5vh auto;
-
-            background: rgba(10, 10, 18, 0.72);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 25px;
-
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-
-            box-shadow:
-                0 0 50px rgba(80, 40, 255, 0.15),
-                inset 0 0 30px rgba(255, 255, 255, 0.02);
-
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            border-radius: 0;
         }
 
-        header {
-            padding: 22px;
-            text-align: center;
-            font-size: 25px;
-            font-weight: bold;
-
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .status {
-            margin-top: 6px;
-            font-size: 12px;
-            color: #7cffb2;
-            font-weight: normal;
-        }
-
-        #chat {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
+        .sidebar {
+            width: 190px;
+            min-width: 190px;
         }
 
         .message {
-            max-width: 75%;
-            padding: 13px 17px;
-            margin-bottom: 15px;
-            border-radius: 18px;
-            line-height: 1.5;
-            word-wrap: break-word;
+            max-width: 85%;
         }
 
-        .ai {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin-right: auto;
+        .send-button {
+            padding: 0 15px;
+        }
+    }
+
+    @media (max-width: 500px) {
+
+        .sidebar {
+            width: 60px;
+            min-width: 60px;
         }
 
-        .user {
-            background: linear-gradient(135deg, #603cff, #874cff);
-            margin-left: auto;
-            box-shadow: 0 5px 20px rgba(90, 50, 255, 0.25);
+        .sidebar-header {
+            padding: 15px 5px;
+            text-align: center;
+            font-size: 0;
         }
 
-        .input-area {
-            display: flex;
-            gap: 10px;
-            padding: 18px;
-
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(0, 0, 0, 0.25);
+        .sidebar-header::after {
+            content: "💬";
+            font-size: 22px;
         }
 
-        #message {
-            flex: 1;
-            padding: 15px 18px;
-
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 15px;
-
-            outline: none;
-            background: rgba(255, 255, 255, 0.06);
-            color: white;
-
-            font-size: 15px;
+        .new-chat {
+            margin: 10px 8px;
+            padding: 10px 5px;
+            font-size: 0;
         }
 
-        #message::placeholder {
-            color: #999;
+        .new-chat::after {
+            content: "＋";
+            font-size: 20px;
         }
 
-        #message:focus {
-            border-color: rgba(130, 90, 255, 0.8);
-            box-shadow: 0 0 15px rgba(100, 60, 255, 0.15);
+        .conversation {
+            padding: 9px 5px;
+            justify-content: center;
         }
 
-        button {
-            padding: 0 22px;
-            border: none;
-            border-radius: 15px;
-
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-
-            background: linear-gradient(135deg, #603cff, #914dff);
-
-            transition: 0.2s;
+        .conversation-title {
+            display: none;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(100, 60, 255, 0.4);
+        .conversation-buttons {
+            display: none;
         }
+    }
+</style>
+```
 
-        button:active {
-            transform: scale(0.96);
-        }
-
-        /* Kaydırma çubuğu */
-        #chat::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #chat::-webkit-scrollbar-thumb {
-            background: #603cff;
-            border-radius: 10px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                width: 100%;
-                height: 100vh;
-                margin: 0;
-                border-radius: 0;
-            }
-
-            .message {
-                max-width: 85%;
-            }
-
-            button {
-                padding: 0 15px;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <header>
-            🤖 Commando AI
-            <div class="status">● Çevrimiçi</div>
-        </header>
+```
+<!-- SOL MENÜ -->
 
-        <div id="chat">
-            <div class="message ai">
-                Merhaba! Ben Commando AI. 👋
-            </div>
-        </div>
+<aside class="sidebar">
 
-        <div class="input-area">
-            <input
-                id="message"
-                type="text"
-                placeholder="Commando AI'ya bir şey sor..."
-                autocomplete="off"
-            >
+    <div class="sidebar-header">
+        💬 Sohbetler
+    </div>
 
-            <button onclick="sendMessage()">
-                Gönder
-            </button>
-        </div>
+    <button class="new-chat" onclick="newChat()">
+        ＋ Yeni Sohbet
+    </button>
+
+    <div id="conversationList"></div>
+
+</aside>
+
+
+<!-- ANA ALAN -->
+
+<main class="main">
+
+    <header>
+        🤖 Commando AI
+        <div class="status">● Çevrimiçi</div>
+    </header>
+
+    <div id="chat"></div>
+
+    <div class="input-area">
+
+        <input
+            id="message"
+            type="text"
+            placeholder="Commando AI'ya bir şey sor..."
+            autocomplete="off"
+        >
+
+        <button
+            id="sendButton"
+            class="send-button"
+            onclick="sendMessage()"
+        >
+            Gönder
+        </button>
 
     </div>
 
-    <script>
-        const input = document.getElementById("message");
-        const chat = document.getElementById("chat");
+</main>
+```
 
-        input.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                sendMessage();
+</div>
+
+<script>
+
+    /*
+     * ==========================================
+     * COMMAndo AI - SOHBET SİSTEMİ
+     * ==========================================
+     */
+
+    const input = document.getElementById("message");
+    const chat = document.getElementById("chat");
+    const conversationList = document.getElementById("conversationList");
+    const sendButton = document.getElementById("sendButton");
+
+    const STORAGE_KEY = "commando_ai_conversations";
+
+    let conversations = [];
+    let activeConversationId = null;
+
+
+    /*
+     * Güvenli ID oluşturma
+     */
+
+    function createId() {
+        return Date.now().toString() + Math.random().toString(36).substring(2, 8);
+    }
+
+
+    /*
+     * HTML karakterlerini güvenli hale getirir.
+     */
+
+    function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+
+    /*
+     * Sohbetleri kaydet
+     */
+
+    function saveConversations() {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(conversations)
+        );
+    }
+
+
+    /*
+     * Sohbetleri yükle
+     */
+
+    function loadConversations() {
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved) {
+
+            try {
+                conversations = JSON.parse(saved);
             }
+
+            catch {
+                conversations = [];
+            }
+        }
+
+        if (!Array.isArray(conversations)) {
+            conversations = [];
+        }
+
+        renderConversationList();
+
+        if (conversations.length > 0) {
+
+            const sorted = [...conversations].sort(
+                (a, b) => Number(b.pinned) - Number(a.pinned)
+            );
+
+            activeConversationId = sorted[0].id;
+
+            renderActiveConversation();
+
+        } else {
+
+            createConversation();
+        }
+    }
+
+
+    /*
+     * Yeni sohbet oluştur
+     */
+
+    function createConversation() {
+
+        const conversation = {
+            id: createId(),
+            title: "Yeni Sohbet",
+            pinned: false,
+            messages: [
+                {
+                    role: "ai",
+                    text: "Merhaba! Ben Commando AI. 👋"
+                }
+            ]
+        };
+
+        conversations.unshift(conversation);
+
+        activeConversationId = conversation.id;
+
+        saveConversations();
+
+        renderConversationList();
+        renderActiveConversation();
+    }
+
+
+    /*
+     * Yeni sohbet butonu
+     */
+
+    function newChat() {
+
+        createConversation();
+
+        input.focus();
+    }
+
+
+    /*
+     * Aktif sohbeti bul
+     */
+
+    function getActiveConversation() {
+
+        return conversations.find(
+            conversation => conversation.id === activeConversationId
+        );
+    }
+
+
+    /*
+     * Sohbet listesini oluştur
+     */
+
+    function renderConversationList() {
+
+        conversationList.innerHTML = "";
+
+        const sorted = [...conversations].sort((a, b) => {
+
+            if (a.pinned !== b.pinned) {
+                return Number(b.pinned) - Number(a.pinned);
+            }
+
+            return Number(b.id) - Number(a.id);
         });
 
-        async function sendMessage() {
-            const message = input.value.trim();
+        sorted.forEach(conversation => {
 
-            if (!message) return;
+            const item = document.createElement("div");
 
-            chat.innerHTML += `
-                <div class="message user">
-                    ${message}
+            item.className =
+                "conversation" +
+                (conversation.id === activeConversationId ? " active" : "");
+
+            item.innerHTML = `
+                <span class="conversation-title">
+                    ${conversation.pinned ? "📌 " : ""}
+                    ${escapeHtml(conversation.title)}
+                </span>
+
+                <div class="conversation-buttons">
+
+                    <button
+                        class="small-button"
+                        title="${conversation.pinned ? "Sabitlemeyi kaldır" : "Sabitle"}"
+                        onclick="togglePin(event, '${conversation.id}')"
+                    >
+                        ${conversation.pinned ? "📌" : "📍"}
+                    </button>
+
+                    <button
+                        class="small-button"
+                        title="Sil"
+                        onclick="deleteConversation(event, '${conversation.id}')"
+                    >
+                        🗑️
+                    </button>
+
                 </div>
             `;
 
-            input.value = "";
-            chat.scrollTop = chat.scrollHeight;
+            item.addEventListener("click", function() {
+                openConversation(conversation.id);
+            });
 
-            try {
-                const response = await fetch("/chat", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message: message
-                    })
-                });
+            conversationList.appendChild(item);
+        });
+    }
 
-                const data = await response.json();
 
-                chat.innerHTML += `
-                    <div class="message ai">
-                        ${data.reply || "Bir hata oluştu."}
-                    </div>
-                `;
+    /*
+     * Sohbet aç
+     */
 
-                chat.scrollTop = chat.scrollHeight;
+    function openConversation(id) {
 
-            } catch (error) {
+        activeConversationId = id;
 
-                chat.innerHTML += `
-                    <div class="message ai">
-                        Sunucuya bağlanırken bir hata oluştu.
-                    </div>
-                `;
+        renderConversationList();
+        renderActiveConversation();
 
-                chat.scrollTop = chat.scrollHeight;
+        input.focus();
+    }
+
+
+    /*
+     * Aktif sohbeti ekrana getir
+     */
+
+    function renderActiveConversation() {
+
+        const conversation = getActiveConversation();
+
+        if (!conversation) return;
+
+        chat.innerHTML = "";
+
+        conversation.messages.forEach(message => {
+
+            addMessageToScreen(
+                message.role,
+                message.text,
+                message.blocked
+            );
+        });
+
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+
+    /*
+     * Mesajı ekrana ekle
+     */
+
+    function addMessageToScreen(role, text, blocked = false) {
+
+        const div = document.createElement("div");
+
+        div.className =
+            "message " +
+            (role === "user" ? "user" : "ai") +
+            (blocked ? " blocked" : "");
+
+        div.textContent = text;
+
+        chat.appendChild(div);
+    }
+
+
+    /*
+     * Sohbet başlığını belirle
+     */
+
+    function updateConversationTitle(conversation, message) {
+
+        if (
+            conversation.title === "Yeni Sohbet" &&
+            message.trim()
+        ) {
+
+            let title = message.trim();
+
+            if (title.length > 30) {
+                title = title.substring(0, 30) + "...";
+            }
+
+            conversation.title = title;
+        }
+    }
+
+
+    /*
+     * Sohbet sabitleme
+     */
+
+    function togglePin(event, id) {
+
+        event.stopPropagation();
+
+        const conversation = conversations.find(
+            item => item.id === id
+        );
+
+        if (!conversation) return;
+
+        conversation.pinned = !conversation.pinned;
+
+        saveConversations();
+        renderConversationList();
+    }
+
+
+    /*
+     * Sohbet silme
+     */
+
+    function deleteConversation(event, id) {
+
+        event.stopPropagation();
+
+        const index = conversations.findIndex(
+            item => item.id === id
+        );
+
+        if (index === -1) return;
+
+        conversations.splice(index, 1);
+
+        if (activeConversationId === id) {
+
+            if (conversations.length > 0) {
+
+                const sorted = [...conversations].sort(
+                    (a, b) =>
+                        Number(b.pinned) - Number(a.pinned)
+                );
+
+                activeConversationId = sorted[0].id;
+
+            } else {
+
+                createConversation();
+                return;
             }
         }
-    </script>
+
+        saveConversations();
+
+        renderConversationList();
+        renderActiveConversation();
+    }
+
+
+    /*
+     * Enter ile mesaj gönderme
+     */
+
+    input.addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+
+
+    /*
+     * MESAJ GÖNDER
+     */
+
+    async function sendMessage() {
+
+        const message = input.value.trim();
+
+        if (!message || sendButton.disabled) {
+            return;
+        }
+
+        const conversation = getActiveConversation();
+
+        if (!conversation) {
+            return;
+        }
+
+
+        /*
+         * Kullanıcı mesajını kaydet
+         */
+
+        conversation.messages.push({
+            role: "user",
+            text: message
+        });
+
+        updateConversationTitle(conversation, message);
+
+        saveConversations();
+
+        addMessageToScreen("user", message);
+
+        input.value = "";
+
+        renderConversationList();
+
+        chat.scrollTop = chat.scrollHeight;
+
+
+        /*
+         * Gönder butonunu geçici kapat
+         */
+
+        sendButton.disabled = true;
+        sendButton.textContent = "..." ;
+
+
+        try {
+
+            const response = await fetch("/chat", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+
+            const data = await response.json();
+
+
+            /*
+             * Sunucu uygunsuz mesajı engellediyse
+             */
+
+            if (data.blocked) {
+
+                const blockedText =
+                    data.reply ||
+                    "Bu mesaj uygunsuz olduğu için cevap veremiyorum.";
+
+                conversation.messages.push({
+                    role: "ai",
+                    text: blockedText,
+                    blocked: true
+                });
+
+                saveConversations();
+
+                addMessageToScreen(
+                    "ai",
+                    blockedText,
+                    true
+                );
+
+            }
+
+            /*
+             * Normal AI cevabı
+             */
+
+            else {
+
+                const reply =
+                    data.reply ||
+                    data.error ||
+                    "Bir hata oluştu.";
+
+                conversation.messages.push({
+                    role: "ai",
+                    text: reply
+                });
+
+                saveConversations();
+
+                addMessageToScreen(
+                    "ai",
+                    reply
+                );
+            }
+
+
+        }
+
+        catch (error) {
+
+            const errorMessage =
+                "Sunucuya bağlanırken bir hata oluştu.";
+
+            conversation.messages.push({
+                role: "ai",
+                text: errorMessage
+            });
+
+            saveConversations();
+
+            addMessageToScreen(
+                "ai",
+                errorMessage
+            );
+        }
+
+
+        sendButton.disabled = false;
+        sendButton.textContent = "Gönder";
+
+        chat.scrollTop = chat.scrollHeight;
+
+        input.focus();
+    }
+
+
+    /*
+     * Uygulama başlat
+     */
+
+    loadConversations();
+
+    input.focus();
+
+</script>
 
 </body>
 </html>
