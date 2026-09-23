@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -14,369 +15,340 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #080b12;
-    color: #fff;
+    background: #05070d;
+    color: #f2f5ff;
     height: 100vh;
     overflow: hidden;
+}
+
+button, textarea {
+    font-family: inherit;
 }
 
 .app {
     display: flex;
     height: 100vh;
+    background:
+        radial-gradient(circle at 70% 20%, rgba(15,48,110,.18), transparent 35%),
+        #05070d;
 }
 
-/* SOL MENÜ */
+/* SIDEBAR */
+
 .sidebar {
-    width: 280px;
-    background: #0d111a;
-    border-right: 1px solid #202633;
+    width: 260px;
+    min-width: 260px;
+    background: #080d18;
+    border-right: 1px solid #17243b;
     display: flex;
     flex-direction: column;
-    padding: 18px;
-    transition: width .25s ease, opacity .25s ease, padding .25s ease;
+    transition: .25s ease;
     overflow: hidden;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 22px;
+.app.sidebar-closed .sidebar {
+    width: 0;
+    min-width: 0;
+    border: none;
 }
 
-.logo-icon {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+.sidebar-top {
+    padding: 18px 16px 12px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 21px;
-    box-shadow: 0 0 20px rgba(88, 101, 242, .3);
+    background: linear-gradient(135deg,#0b1d3d,#123b7a);
+    border: 1px solid #1e4c91;
+    box-shadow: 0 0 20px rgba(21,76,160,.25);
 }
 
-.logo-text {
-    font-size: 19px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.logo-text span {
+.brand-text strong {
     display: block;
-    color: #8d96a8;
+    font-size: 15px;
+}
+
+.brand-text span {
+    display: block;
+    color: #6e7d98;
     font-size: 11px;
-    margin-top: 3px;
-    font-weight: 400;
+    margin-top: 2px;
 }
 
 .new-chat {
     width: 100%;
-    border: 1px solid #303849;
-    background: #151b27;
-    color: white;
+    border: 1px solid #1d427b;
+    background: linear-gradient(135deg,#0d2348,#0a1730);
+    color: #dceaff;
+    padding: 11px 13px;
     border-radius: 10px;
-    padding: 12px;
     cursor: pointer;
-    font-size: 14px;
-    transition: .2s;
-    margin-bottom: 20px;
+    font-size: 13px;
 }
 
 .new-chat:hover {
-    background: #202838;
-    border-color: #5865f2;
+    background: #102b58;
 }
 
-.section-title {
-    color: #747e91;
-    font-size: 11px;
+.history-title {
+    padding: 16px 16px 8px;
+    color: #65738d;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 9px;
+    letter-spacing: 1.2px;
 }
 
-.conversations {
+.conversation-list {
     flex: 1;
     overflow-y: auto;
+    padding: 0 8px;
 }
 
 .conversation {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px;
-    border-radius: 9px;
-    margin-bottom: 5px;
+    padding: 9px;
+    margin-bottom: 3px;
+    border-radius: 8px;
+    color: #aab6cc;
     cursor: pointer;
-    color: #cbd1dc;
-    transition: .2s;
+    font-size: 12px;
 }
 
 .conversation:hover {
-    background: #171e2b;
+    background: #0d1628;
 }
 
 .conversation.active {
-    background: #1d2535;
-    color: white;
+    background: #0e1d36;
+    border: 1px solid #17345f;
 }
 
 .conversation-title {
     flex: 1;
-    overflow: hidden;
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 13px;
 }
 
-.conversation button {
-    border: 0;
+.conversation-actions {
+    display: flex;
+    gap: 2px;
+}
+
+.conversation-actions button {
+    border: none;
     background: transparent;
-    color: #778197;
+    color: #667590;
     cursor: pointer;
-    font-size: 14px;
     padding: 3px;
 }
 
-.conversation button:hover {
-    color: white;
-}
-
 .sidebar-footer {
-    border-top: 1px solid #202633;
-    padding-top: 15px;
-    color: #727c8f;
-    font-size: 12px;
-    white-space: nowrap;
+    padding: 12px 16px;
+    border-top: 1px solid #131e31;
+    color: #53617a;
+    font-size: 10px;
+    text-align: center;
 }
 
-/* ANA ALAN */
+/* MAIN */
+
 .main {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    min-width: 0;
-    position: relative;
 }
 
-/* MENÜ AÇ/KAPAT */
-.sidebar-toggle {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    z-index: 1000;
-
-    width: 40px;
-    height: 40px;
-
-    border: 1px solid #303849;
-    border-radius: 10px;
-
-    background: #121824;
-    color: white;
-
-    cursor: pointer;
-    font-size: 18px;
-
-    transition: .2s;
-}
-
-.sidebar-toggle:hover {
-    background: #202838;
-    border-color: #5865f2;
-    transform: scale(1.04);
-}
-
-/* MENÜ KAPALI */
-.app.sidebar-closed .sidebar {
-    width: 0;
-    opacity: 0;
-    padding-left: 0;
-    padding-right: 0;
-    border-right: 0;
-}
-
-.app.sidebar-closed .main {
-    width: 100%;
-}
-
-/* ÜST BAR */
 .header {
-    height: 70px;
-    border-bottom: 1px solid #202633;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 25px;
-    background: rgba(8, 11, 18, .92);
-}
-
-.header-left {
+    height: 60px;
+    min-height: 60px;
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 0 18px;
+    border-bottom: 1px solid #121d30;
+    background: rgba(5,8,15,.88);
 }
 
-.bot-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+.sidebar-toggle {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #1b2d4b;
+    border-radius: 9px;
+    background: #0a1220;
+    color: #9db5d9;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.header-info {
+    flex: 1;
+}
+
+.header-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.header-status {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 5px;
+    color: #64738c;
+    font-size: 10px;
+    margin-top: 2px;
 }
 
-.header-name {
-    font-weight: 600;
-}
-
-.status {
-    color: #48d597;
-    font-size: 11px;
-    margin-top: 3px;
-}
-
-.status::before {
-    content: "";
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    background: #48d597;
+.online-dot {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    margin-right: 5px;
+    background: #2f9bff;
+    box-shadow: 0 0 8px #2f9bff;
 }
 
-/* MESAJ ALANI */
+/* CHAT */
+
 .chat {
     flex: 1;
     overflow-y: auto;
-    padding: 30px;
+    padding: 22px 20px 110px;
 }
 
-.message {
-    max-width: 850px;
-    margin: 0 auto 22px;
-    display: flex;
-    gap: 12px;
+.chat-inner {
+    width: 100%;
+    max-width: 820px;
+    margin: auto;
 }
 
-.message-avatar {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 10px;
+.welcome {
+    text-align: center;
+    margin: 70px auto 35px;
+    max-width: 520px;
+}
+
+.welcome-logo {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 18px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #171e2b;
+    background: linear-gradient(145deg,#081a37,#123c79);
+    border: 1px solid #1d4d91;
+    box-shadow: 0 0 35px rgba(20,75,155,.22);
+    font-size: 27px;
 }
 
-.message.user .message-avatar {
-    background: #263149;
+.welcome h1 {
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    color: #718099;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* MESAJLAR */
+
+.message {
+    display: flex;
+    margin-bottom: 14px;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.ai {
+    justify-content: flex-start;
 }
 
 .message-content {
-    flex: 1;
-    line-height: 1.6;
-    font-size: 14px;
-    color: #dce1ea;
-    white-space: pre-wrap;
-    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    max-width: 78%;
 }
 
 .message-name {
-    font-size: 12px;
-    font-weight: 600;
-    color: #8e98aa;
-    margin-bottom: 4px;
-}
-
-/* GİRİŞ */
-.input-area {
-    padding: 18px 25px 25px;
-    background: linear-gradient(transparent, #080b12 25%);
-}
-
-.input-box {
-    max-width: 850px;
-    margin: auto;
-    background: #121824;
-    border: 1px solid #293244;
-    border-radius: 15px;
-    display: flex;
-    align-items: flex-end;
-    padding: 10px;
-    transition: .2s;
-}
-
-.input-box:focus-within {
-    border-color: #5865f2;
-    box-shadow: 0 0 0 3px rgba(88, 101, 242, .1);
-}
-
-textarea {
-    flex: 1;
-    resize: none;
-    max-height: 150px;
-    min-height: 42px;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: white;
-    font-family: inherit;
-    font-size: 14px;
-    padding: 11px;
-}
-
-textarea::placeholder {
-    color: #687287;
-}
-
-.send {
-    width: 42px;
-    height: 42px;
-    border: 0;
-    border-radius: 11px;
-    background: #5865f2;
-    color: white;
-    cursor: pointer;
-    font-size: 17px;
-    transition: .2s;
-}
-
-.send:hover {
-    background: #6875ff;
-    transform: translateY(-1px);
-}
-
-.send:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.disclaimer {
-    text-align: center;
-    color: #535d70;
     font-size: 10px;
-    margin-top: 9px;
+    font-weight: bold;
+    color: #6f8fbd;
+    margin-bottom: 4px;
+    padding: 0 4px;
 }
 
-/* YAZIYOR ANİMASYONU */
+.message.user .message-name {
+    color: #4f8fe8;
+    text-align: right;
+}
+
+.message.ai .message-name {
+    color: #6f91c0;
+}
+
+.message-box {
+    padding: 10px 13px;
+    border-radius: 13px;
+    font-size: 13px;
+    line-height: 1.45;
+
+    /* Gereksiz satır boşluklarını kaldırır */
+    white-space: normal;
+
+    word-wrap: break-word;
+}
+
+.message.user .message-box {
+    background: linear-gradient(135deg,#12366d,#0e2955);
+    border: 1px solid #1c4d91;
+    color: #eaf2ff;
+    border-bottom-right-radius: 4px;
+}
+
+.message.ai .message-box {
+    background: #0b111d;
+    border: 1px solid #18263d;
+    color: #d6deec;
+    border-bottom-left-radius: 4px;
+}
+
+/* TYPING */
+
 .typing {
-    display: inline-flex;
-    gap: 4px;
-    padding: 8px 0;
+    display: none;
+    width: fit-content;
+    background: #0b111d;
+    border: 1px solid #18263d;
+    padding: 9px 12px;
+    border-radius: 12px;
 }
 
 .typing span {
-    width: 6px;
-    height: 6px;
-    background: #7d8799;
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background: #5f88c4;
     border-radius: 50%;
+    margin: 0 2px;
     animation: typing 1.2s infinite;
 }
 
@@ -389,46 +361,119 @@ textarea::placeholder {
 }
 
 @keyframes typing {
-    0%, 60%, 100% {
-        opacity: .3;
+    0%,60%,100% {
         transform: translateY(0);
+        opacity: .4;
     }
 
     30% {
-        opacity: 1;
         transform: translateY(-4px);
+        opacity: 1;
     }
 }
 
+/* INPUT */
+
+.input-area {
+    position: fixed;
+    bottom: 0;
+    left: 260px;
+    right: 0;
+    padding: 12px 20px 16px;
+    background: linear-gradient(transparent,#05070d 35%);
+    transition: .25s ease;
+}
+
+.app.sidebar-closed .input-area {
+    left: 0;
+}
+
+.input-wrap {
+    max-width: 820px;
+    margin: auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: #0a101c;
+    border: 1px solid #1a2b45;
+    border-radius: 14px;
+    padding: 7px;
+}
+
+textarea {
+    flex: 1;
+    min-height: 38px;
+    max-height: 130px;
+    resize: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #eaf0fb;
+    padding: 9px 10px;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+textarea::placeholder {
+    color: #53627a;
+}
+
+.send-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #24528f;
+    border-radius: 10px;
+    background: linear-gradient(135deg,#12366b,#0d2851);
+    color: #dceaff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.send-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.input-note {
+    max-width: 820px;
+    margin: 5px auto 0;
+    text-align: center;
+    color: #46536a;
+    font-size: 9px;
+}
+
 /* MOBİL */
-@media (max-width: 700px) {
+
+@media (max-width:700px) {
 
     .sidebar {
         position: fixed;
-        z-index: 900;
+        z-index: 20;
         height: 100vh;
-        left: 0;
-        top: 0;
-    }
-
-    .app.sidebar-closed .sidebar {
-        width: 0;
-    }
-
-    .chat {
-        padding: 20px 14px;
-    }
-
-    .header {
-        padding: 0 15px;
+        box-shadow: 10px 0 30px rgba(0,0,0,.4);
     }
 
     .input-area {
-        padding: 12px;
+        left: 0;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
-    .message {
-        gap: 8px;
+    .chat {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .message-content {
+        max-width: 88%;
+    }
+
+    .welcome {
+        margin-top: 45px;
+    }
+
+    .welcome h1 {
+        font-size: 22px;
     }
 }
 </style>
@@ -436,20 +481,19 @@ textarea::placeholder {
 
 <body>
 
-<div class="app">
+<div class="app" id="app">
 
-    <!-- SOL SOHBET MENÜSÜ -->
-    <aside class="sidebar">
+<aside class="sidebar">
 
-        <div class="logo">
+    <div class="sidebar-top">
 
-            <div class="logo-icon">
-                🤖
-            </div>
+        <div class="brand">
 
-            <div class="logo-text">
-                Commando AI
-                <span>Yapay zeka asistanı</span>
+            <div class="brand-icon">⚡</div>
+
+            <div class="brand-text">
+                <strong>Commando AI</strong>
+                <span>Yapay Zeka Asistanı</span>
             </div>
 
         </div>
@@ -458,113 +502,125 @@ textarea::placeholder {
             ＋ Yeni Sohbet
         </button>
 
-        <div class="section-title">
-            Sohbetler
+    </div>
+
+    <div class="history-title">
+        Sohbetler
+    </div>
+
+    <div class="conversation-list" id="conversationList"></div>
+
+    <div class="sidebar-footer">
+        Commando AI • 2026
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+<header class="header">
+
+    <button
+        class="sidebar-toggle"
+        onclick="toggleSidebar()"
+    >
+        ☰
+    </button>
+
+    <div class="header-info">
+
+        <div class="header-title">
+            Commando AI
         </div>
 
-        <div id="conversationList" class="conversations"></div>
-
-        <div class="sidebar-footer">
-            Commando AI • v1.0
+        <div class="header-status">
+            <span class="online-dot"></span>
+            Çevrimiçi
         </div>
 
-    </aside>
+    </div>
+
+</header>
 
 
-    <!-- ANA ALAN -->
-    <main class="main">
+<section class="chat" id="chat">
 
-        <!-- SOHBET MENÜSÜ AÇ/KAPAT -->
+    <div class="chat-inner" id="chatInner">
+
+        <div class="welcome" id="welcome">
+
+            <div class="welcome-logo">
+                ⚡
+            </div>
+
+            <h1>Commando AI</h1>
+
+            <p>
+                Sorularını sor, fikirlerini paylaş veya
+                herhangi bir konuda yardım al.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="input-area">
+
+    <div class="input-wrap">
+
+        <textarea
+            id="messageInput"
+            placeholder="Commando AI'a bir şey sor..."
+            rows="1"
+        ></textarea>
+
         <button
-            class="sidebar-toggle"
-            onclick="toggleSidebar()"
-            title="Sohbet menüsünü aç/kapat"
+            class="send-btn"
+            id="sendBtn"
+            onclick="sendMessage()"
         >
-            ☰
+            ➤
         </button>
 
+    </div>
 
-        <header class="header">
+    <div class="input-note">
+        Commando AI hata yapabilir. Önemli bilgileri kontrol edin.
+    </div>
 
-            <div class="header-left">
+</div>
 
-                <div class="bot-avatar">
-                    🤖
-                </div>
-
-                <div>
-
-                    <div class="header-name">
-                        Commando AI
-                    </div>
-
-                    <div class="status">
-                        Çevrimiçi
-                    </div>
-
-                </div>
-
-            </div>
-
-        </header>
-
-
-        <section id="chat" class="chat"></section>
-
-
-        <div class="input-area">
-
-            <div class="input-box">
-
-                <textarea
-                    id="messageInput"
-                    placeholder="Commando AI'ya bir şey sor..."
-                    rows="1"
-                ></textarea>
-
-                <button
-                    id="sendButton"
-                    class="send"
-                    onclick="sendMessage()"
-                >
-                    ➤
-                </button>
-
-            </div>
-
-            <div class="disclaimer">
-                Commando AI hata yapabilir. Önemli bilgileri kontrol edin.
-            </div>
-
-        </div>
-
-    </main>
+</main>
 
 </div>
 
 
 <script>
 
-/* =========================
-   COMMando AI SOHBET SİSTEMİ
-   ========================= */
-
 const STORAGE_KEY = "commando_ai_conversations";
 
-let conversations = [];
-let activeConversationId = null;
+let conversations =
+    JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+let currentConversationId = null;
+
+const chatInner =
+    document.getElementById("chatInner");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendBtn =
+    document.getElementById("sendBtn");
+
+const conversationList =
+    document.getElementById("conversationList");
 
 
-/* ID */
-function createId() {
-
-    return Date.now().toString()
-        + Math.random().toString(36).slice(2);
-
-}
-
-
-/* HTML GÜVENLİĞİ */
 function escapeHtml(text) {
 
     const div = document.createElement("div");
@@ -572,11 +628,18 @@ function escapeHtml(text) {
     div.textContent = text;
 
     return div.innerHTML;
+}
+
+
+function toggleSidebar() {
+
+    document
+        .getElementById("app")
+        .classList.toggle("sidebar-closed");
 
 }
 
 
-/* KAYDET */
 function saveConversations() {
 
     localStorage.setItem(
@@ -587,117 +650,64 @@ function saveConversations() {
 }
 
 
-/* YÜKLE */
-function loadConversations() {
+function newChat() {
 
-    const saved =
-        localStorage.getItem(STORAGE_KEY);
+    currentConversationId = null;
 
-    if (saved) {
+    chatInner.innerHTML = `
 
-        try {
+        <div class="welcome" id="welcome">
 
-            conversations =
-                JSON.parse(saved);
+            <div class="welcome-logo">
+                ⚡
+            </div>
 
-        } catch {
+            <h1>Commando AI</h1>
 
-            conversations = [];
+            <p>
+                Sorularını sor, fikirlerini paylaş veya
+                herhangi bir konuda yardım al.
+            </p>
 
-        }
+        </div>
+    `;
 
-    }
+    renderConversations();
 
-    if (!conversations.length) {
-
-        createConversation();
-
-    } else {
-
-        activeConversationId =
-            conversations[0].id;
-
-    }
-
-    renderConversationList();
-    renderActiveConversation();
-
+    messageInput.focus();
 }
 
 
-/* YENİ SOHBET */
 function createConversation() {
 
     const conversation = {
 
-        id: createId(),
+        id: Date.now(),
 
         title: "Yeni Sohbet",
 
-        pinned: false,
-
-        messages: [
-
-            {
-                role: "ai",
-                text:
-                    "Merhaba! Ben Commando AI. 👋\n\n" +
-                    "Sana nasıl yardımcı olabilirim?"
-            }
-
-        ]
+        messages: []
 
     };
 
     conversations.unshift(conversation);
 
-    activeConversationId =
+    currentConversationId =
         conversation.id;
 
     saveConversations();
 
-    renderConversationList();
-    renderActiveConversation();
+    renderConversations();
 
+    return conversation;
 }
 
 
-/* YENİ SOHBET */
-function newChat() {
+function renderConversations() {
 
-    createConversation();
+    conversationList.innerHTML = "";
 
-}
-
-
-/* AKTİF SOHBET */
-function getActiveConversation() {
-
-    return conversations.find(
-        c => c.id === activeConversationId
-    );
-
-}
-
-
-/* SOHBET LİSTESİ */
-function renderConversationList() {
-
-    const list =
-        document.getElementById(
-            "conversationList"
-        );
-
-    list.innerHTML = "";
-
-    const sorted =
-        [...conversations].sort(
-            (a, b) =>
-                Number(b.pinned) -
-                Number(a.pinned)
-        );
-
-    sorted.forEach(conversation => {
+    conversations.forEach(conversation => {
 
         const item =
             document.createElement("div");
@@ -706,7 +716,7 @@ function renderConversationList() {
             "conversation" +
             (
                 conversation.id ===
-                activeConversationId
+                currentConversationId
                     ? " active"
                     : ""
             );
@@ -719,94 +729,81 @@ function renderConversationList() {
                 ${escapeHtml(conversation.title)}
             </div>
 
-            <button
-                onclick="
-                    event.stopPropagation();
-                    togglePin('${conversation.id}')
-                "
-                title="Sabitle"
-            >
-                ${
-                    conversation.pinned
-                        ? "📌"
-                        : "📍"
-                }
-            </button>
+            <div class="conversation-actions">
 
-            <button
-                onclick="
-                    event.stopPropagation();
-                    deleteConversation('${conversation.id}')
-                "
-                title="Sil"
-            >
-                🗑️
-            </button>
+                <button
+                    onclick="event.stopPropagation(); togglePin(${conversation.id})"
+                >
+                    ${conversation.pinned ? "📌" : "📍"}
+                </button>
 
+                <button
+                    onclick="event.stopPropagation(); deleteConversation(${conversation.id})"
+                >
+                    🗑
+                </button>
+
+            </div>
         `;
 
-        item.onclick =
-            () => openConversation(
-                conversation.id
-            );
+        item.onclick = () =>
+            loadConversation(conversation.id);
 
-        list.appendChild(item);
+        conversationList.appendChild(item);
 
     });
 
 }
 
 
-/* SOHBET AÇ */
-function openConversation(id) {
-
-    activeConversationId = id;
-
-    renderConversationList();
-
-    renderActiveConversation();
-
-}
-
-
-/* SOHBETİ GÖSTER */
-function renderActiveConversation() {
-
-    const chat =
-        document.getElementById("chat");
-
-    chat.innerHTML = "";
+function loadConversation(id) {
 
     const conversation =
-        getActiveConversation();
+        conversations.find(c => c.id === id);
 
     if (!conversation) return;
 
-    conversation.messages.forEach(
-        message => {
+    currentConversationId = id;
 
-            addMessageToScreen(
+    chatInner.innerHTML = "";
+
+    if (conversation.messages.length === 0) {
+
+        chatInner.innerHTML = `
+
+            <div class="welcome">
+
+                <div class="welcome-logo">
+                    ⚡
+                </div>
+
+                <h1>Commando AI</h1>
+
+                <p>Yeni sohbet başladı.</p>
+
+            </div>
+        `;
+
+    } else {
+
+        conversation.messages.forEach(message => {
+
+            addMessage(
                 message.role,
-                message.text
+                message.content,
+                false
             );
 
-        }
-    );
+        });
 
-    chat.scrollTop =
-        chat.scrollHeight;
+    }
+
+    renderConversations();
 
 }
 
 
-/* MESAJ EKLE */
-function addMessageToScreen(
-    role,
-    text
-) {
-
-    const chat =
-        document.getElementById("chat");
+function addMessage(role, content, scroll = true) {
 
     const message =
         document.createElement("div");
@@ -814,21 +811,20 @@ function addMessageToScreen(
     message.className =
         "message " + role;
 
-    const avatar =
-        role === "user"
-            ? "👤"
-            : "🤖";
-
     const name =
         role === "user"
             ? "Sen"
             : "Commando AI";
 
-    message.innerHTML = `
+    /*
+       trim() sayesinde cevabın başındaki
+       ve sonundaki gereksiz boşluklar temizlenir.
+    */
 
-        <div class="message-avatar">
-            ${avatar}
-        </div>
+    const cleanContent =
+        String(content || "").trim();
+
+    message.innerHTML = `
 
         <div class="message-content">
 
@@ -836,40 +832,241 @@ function addMessageToScreen(
                 ${name}
             </div>
 
-            ${escapeHtml(text)}
+            <div class="message-box">
+                ${escapeHtml(cleanContent)}
+            </div>
 
         </div>
-
     `;
 
-    chat.appendChild(message);
+    chatInner.appendChild(message);
+
+    if (scroll) {
+
+        const chat =
+            document.getElementById("chat");
+
+        chat.scrollTop =
+            chat.scrollHeight;
+
+    }
 
 }
 
 
-/* BAŞLIK */
-function updateConversationTitle(
-    conversation,
-    message
-) {
+function showTyping() {
 
-    if (
-        conversation.title !==
-        "Yeni Sohbet"
-    ) return;
+    const typing =
+        document.createElement("div");
 
-    const clean =
-        message.trim();
+    typing.className = "message ai";
 
-    conversation.title =
-        clean.length > 28
-            ? clean.substring(0, 28) + "..."
-            : clean;
+    typing.id = "typingMessage";
+
+    typing.innerHTML = `
+
+        <div class="message-content">
+
+            <div class="message-name">
+                Commando AI
+            </div>
+
+            <div
+                class="typing"
+                style="display:block"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+        </div>
+    `;
+
+    chatInner.appendChild(typing);
+
+    const chat =
+        document.getElementById("chat");
+
+    chat.scrollTop =
+        chat.scrollHeight;
 
 }
 
 
-/* SABİTLE */
+function hideTyping() {
+
+    const typing =
+        document.getElementById("typingMessage");
+
+    if (typing) {
+        typing.remove();
+    }
+
+}
+
+
+async function sendMessage() {
+
+    const message =
+        messageInput.value.trim();
+
+    if (!message) return;
+
+    sendBtn.disabled = true;
+
+    const welcome =
+        document.getElementById("welcome");
+
+    if (welcome) {
+        welcome.remove();
+    }
+
+    if (!currentConversationId) {
+        createConversation();
+    }
+
+    const conversation =
+        conversations.find(
+            c => c.id === currentConversationId
+        );
+
+    addMessage("user", message);
+
+    conversation.messages.push({
+
+        role: "user",
+
+        content: message
+
+    });
+
+    if (conversation.title === "Yeni Sohbet") {
+
+        conversation.title =
+            message.length > 30
+                ? message.substring(0,30) + "..."
+                : message;
+
+    }
+
+    saveConversations();
+
+    renderConversations();
+
+    messageInput.value = "";
+
+    autoResize();
+
+    showTyping();
+
+    try {
+
+        const response =
+            await fetch("/chat", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    message: message
+                })
+
+            });
+
+        const data =
+            await response.json();
+
+        hideTyping();
+
+        if (data.blocked) {
+
+            addMessage(
+                "ai",
+                data.reply
+            );
+
+            conversation.messages.push({
+
+                role: "assistant",
+
+                content: data.reply
+
+            });
+
+            saveConversations();
+
+            return;
+        }
+
+        const reply =
+            data.reply ||
+            data.output ||
+            "Üzgünüm, cevap oluşturulamadı.";
+
+        addMessage(
+            "ai",
+            reply
+        );
+
+        conversation.messages.push({
+
+            role: "assistant",
+
+            content: reply
+
+        });
+
+        saveConversations();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        hideTyping();
+
+        addMessage(
+            "ai",
+            "Sunucuya bağlanırken bir hata oluştu."
+        );
+
+    }
+
+    finally {
+
+        sendBtn.disabled = false;
+
+        messageInput.focus();
+
+    }
+
+}
+
+
+function deleteConversation(id) {
+
+    conversations =
+        conversations.filter(
+            c => c.id !== id
+        );
+
+    if (currentConversationId === id) {
+        newChat();
+    }
+
+    saveConversations();
+
+    renderConversations();
+
+}
+
+
 function togglePin(id) {
 
     const conversation =
@@ -882,317 +1079,61 @@ function togglePin(id) {
     conversation.pinned =
         !conversation.pinned;
 
-    saveConversations();
-
-    renderConversationList();
-
-}
-
-
-/* SİL */
-function deleteConversation(id) {
-
-    conversations =
-        conversations.filter(
-            c => c.id !== id
-        );
-
-    if (!conversations.length) {
-
-        createConversation();
-
-        return;
-
-    }
-
-    if (
-        activeConversationId === id
-    ) {
-
-        activeConversationId =
-            conversations[0].id;
-
-    }
-
-    saveConversations();
-
-    renderConversationList();
-
-    renderActiveConversation();
-
-}
-
-
-/* YAZIYOR */
-function showTyping() {
-
-    const chat =
-        document.getElementById("chat");
-
-    const typing =
-        document.createElement("div");
-
-    typing.id =
-        "typingIndicator";
-
-    typing.className =
-        "message ai";
-
-    typing.innerHTML = `
-
-        <div class="message-avatar">
-            🤖
-        </div>
-
-        <div class="message-content">
-
-            <div class="message-name">
-                Commando AI
-            </div>
-
-            <div class="typing">
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-            </div>
-
-        </div>
-
-    `;
-
-    chat.appendChild(typing);
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
-}
-
-
-/* MESAJ GÖNDER */
-async function sendMessage() {
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    const button =
-        document.getElementById(
-            "sendButton"
-        );
-
-    const message =
-        input.value.trim();
-
-    if (!message) return;
-
-    const conversation =
-        getActiveConversation();
-
-    if (!conversation) return;
-
-
-    /* KULLANICI MESAJI */
-    conversation.messages.push({
-
-        role: "user",
-
-        text: message
-
-    });
-
-    updateConversationTitle(
-        conversation,
-        message
+    conversations.sort(
+        (a,b) =>
+            Number(b.pinned) -
+            Number(a.pinned)
     );
 
     saveConversations();
 
-    addMessageToScreen(
-        "user",
-        message
-    );
+    renderConversations();
+
+}
 
 
-    input.value = "";
+messageInput.addEventListener(
+    "keydown",
+    function(event) {
 
-    input.style.height =
-        "auto";
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
 
-    button.disabled =
-        true;
+            event.preventDefault();
 
-    showTyping();
+            sendMessage();
 
-
-    try {
-
-        const response =
-            await fetch(
-                "/chat",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        message: message
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        const typing =
-            document.getElementById(
-                "typingIndicator"
-            );
-
-        if (typing) {
-            typing.remove();
         }
-
-
-        const reply =
-            data.reply ||
-            data.error ||
-            "Bir hata oluştu.";
-
-
-        conversation.messages.push({
-
-            role: "ai",
-
-            text: reply
-
-        });
-
-
-        saveConversations();
-
-
-        addMessageToScreen(
-            "ai",
-            reply
-        );
-
-
-        renderConversationList();
-
-
-    } catch (error) {
-
-        const typing =
-            document.getElementById(
-                "typingIndicator"
-            );
-
-        if (typing) {
-            typing.remove();
-        }
-
-
-        const errorMessage =
-            "Sunucuya bağlanırken bir hata oluştu.";
-
-
-        conversation.messages.push({
-
-            role: "ai",
-
-            text: errorMessage
-
-        });
-
-
-        saveConversations();
-
-
-        addMessageToScreen(
-            "ai",
-            errorMessage
-        );
 
     }
+);
 
 
-    button.disabled =
-        false;
-
-    input.focus();
-
-}
+messageInput.addEventListener(
+    "input",
+    autoResize
+);
 
 
-/* ENTER */
-document
-    .getElementById("messageInput")
-    .addEventListener(
-        "keydown",
-        function(event) {
+function autoResize() {
 
-            if (
-                event.key === "Enter" &&
-                !event.shiftKey
-            ) {
+    messageInput.style.height = "auto";
 
-                event.preventDefault();
-
-                sendMessage();
-
-            }
-
-        }
-    );
-
-
-/* TEXTAREA OTOMATİK BÜYÜME */
-document
-    .getElementById("messageInput")
-    .addEventListener(
-        "input",
-        function() {
-
-            this.style.height =
-                "auto";
-
-            this.style.height =
-                Math.min(
-                    this.scrollHeight,
-                    150
-                ) + "px";
-
-        }
-    );
-
-
-/* MENÜ AÇ / KAPAT */
-function toggleSidebar() {
-
-    const app =
-        document.querySelector(".app");
-
-    app.classList.toggle(
-        "sidebar-closed"
-    );
+    messageInput.style.height =
+        Math.min(
+            messageInput.scrollHeight,
+            130
+        ) + "px";
 
 }
 
 
-/* BAŞLAT */
-loadConversations();
+renderConversations();
 
 </script>
 
 </body>
 </html>
+```
