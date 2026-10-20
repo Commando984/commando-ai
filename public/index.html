@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -468,6 +468,18 @@
         /* MOBILE */
 
         @media (max-width: 700px) {
+            /* Mobilde menü düğmesi, menü açıkken de üstte görünür kalsın. */
+            .topbar {
+                padding-left: 60px;
+            }
+
+            .menu-button {
+                position: fixed;
+                top: 12px;
+                left: 12px;
+                z-index: 30;
+            }
+
             .sidebar {
                 position: fixed;
                 z-index: 20;
@@ -1308,8 +1320,12 @@
     renderConversations();
     renderMessages();
 
+    // Telefonda/tablette menü kapalı başlasın; üstteki ☰ düğmesiyle açılır.
+    if (window.innerWidth <= 700) {
+        document.getElementById("sidebar").classList.add("closed");
+    }
+
 </script>
 
 </body>
 </html>
-```
